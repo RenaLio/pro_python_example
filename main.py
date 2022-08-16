@@ -5,7 +5,7 @@ import random
 import schedule
 from loguru import logger
 
-trace  = logger.add('./logs',retention='3 days')
+trace  = logger.add('./logs/runtime.log',retention='3 days')
 
 def update_sub():       # 1 Hour
     global list_sub
