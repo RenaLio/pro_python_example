@@ -1,0 +1,12 @@
+[Unit]
+Description=python_pro
+After=network.target
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+Type=simple
+WorkingDirectory=/root/pro_python_example
+ExecStart=/usr/bin/env python3 -m example
+Restart=always
