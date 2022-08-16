@@ -64,7 +64,7 @@ def get_sub():      # 5min
     logger.info(f'sub_num is {num_sub}')
     url = list_sub[num_sub]
     try:
-        with requests.get(url,timeout=5) as resp:
+        with requests.get(url,headers=headers,timeout=5) as resp:
             if resp.status_code==200:
                 url_info = resp.text
                 if url_info=='':
@@ -73,10 +73,11 @@ def get_sub():      # 5min
                 try:
                     with open(SUB_PATH,'w',encoding='utf-8') as f:
                         f.write(url_info)
+                    logger.info(f'更新订阅:{url}成功')
                 except:
                     logger.debug(f'写入{SUB_PATH}失败')
             else:
-                logger.error(f'访问订阅错误，状态码{resp.status_code}')
+                logger.error(f'访问订阅{url}错误，状态码{resp.status_code}')
     except:
         logger.error('访问订阅连接超时 | 访问失败')
 
@@ -85,7 +86,7 @@ def get_url():      # 5min
     logger.info(f'url_num is {num_url}')
     url = list_url[num_url]
     try:
-        with requests.get(url,timeout=5) as resp:
+        with requests.get(url,headers=headers,timeout=5) as resp:
             if resp.status_code==200:
                 url_info = resp.text
                 if url_info=='':
@@ -95,10 +96,11 @@ def get_url():      # 5min
                 try:
                     with open(URL_PATH,'w',encoding='utf-8') as f:
                         f.write(url_info)
+                    logger.info(f'更新订阅:{url}成功')
                 except:
                     logger.debug(f'写入{URL_PATH}失败')
             else:
-                logger.error(f'访问订阅错误，状态码{resp.status_code}')
+                logger.error(f'访问订阅{url}错误，状态码{resp.status_code}')
     except:
         logger.error('访问订阅连接超时 | 访问失败')
     
