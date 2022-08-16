@@ -1,4 +1,5 @@
 import time
+import base64
 import requests
 import random
 import schedule
@@ -34,6 +35,23 @@ def update_url():       # 0.5 Hour
                 logger.error(f'访问url_list错误，状态码{resp.status_code}')
     except:
         logger.error('访问url_list连接超时 | 访问失败')
+
+def get_base64():       # 1 Day
+    url = 'https://raw.githubusercontent.com/RenaLio/Mux2sub/main/z_textlist'
+    try:
+        with requests.get(url,timeout=5) as resp:
+            if resp.status_code==200:
+                base_text = resp.text
+                base_text = base_text.encode('utf-8')
+                bs64 = base64.b64encode(base_text)
+                logger.info(f'访问BS64成功')
+                with open(TEXT_PATH,'wb+') as f:
+                    f.write(bs64)
+                logger.info(f'更新BS64成功')
+            else:
+                logger.error(f'访问BS64错误，状态码{resp.status_code}')
+    except:
+        logger.error('访问BS64连接超时 | 访问失败')
 
 def get_num():      # 5min
     global num_sub,num_url
@@ -83,6 +101,8 @@ def get_url():      # 5min
                 logger.error(f'访问订阅错误，状态码{resp.status_code}')
     except:
         logger.error('访问订阅连接超时 | 访问失败')
+    
+
 
 @logger.catch
 def bot_send(text):
@@ -106,6 +126,8 @@ def main():
     get_num()
     get_sub()
     get_url()
+    get_base64()
+    schedule.every().day.at("12:00").do(get_base64)
     schedule.every(30).minutes.do(update_url)
     schedule.every().hour.do(update_sub)
     schedule.every(5).minutes.do(get_num)
@@ -118,6 +140,7 @@ def main():
 if __name__=='__main__':
     SUB_PATH = './temp'
     URL_PATH = './paste'
+    TEXT_PATH = './text'
     list_sub = []
     list_url =[]
     num_sub,num_url = 0,0
